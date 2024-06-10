@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,8 +50,10 @@ public class SecurityConfig {
                 // HTTP 요청에 대한 권한 설정
                 .authorizeRequests(auth -> auth
                         // 해당 패턴에 대해서는 권한 허용
-                        .requestMatchers("/test", "/register", "/auth", "/jwt/**").permitAll()   // test, register 라는 요청에 대해서는 모두 허용
-                                                                                    // /** -> '/'이후에 나오는 모든 것들을 허용
+                        .requestMatchers("/test", "/register", "/auth", "/jwt/**",
+                                // SpringDoc open API 주소 허용
+                                "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()   // test, register 라는 요청에 대해서는 모두 허용
+                                                                                // /** -> '/'이후에 나오는 모든 것들을 허용
                         .anyRequest().authenticated()   // 그 외 모든 요청에 대해서 인증을 요구
                 )
                 // REST API 는 무상채성을 가지기 때문에 세션을 무상태(STATELESS)로 설정
